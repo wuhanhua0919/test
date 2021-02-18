@@ -1,0 +1,22 @@
+server:
+  port: 8190
+
+node: 01
+
+spring:
+  dubbo:
+    application:
+      name: ksq-service
+    registry:
+      address: @zookeeper.url@
+    protocol:
+      name: dubbo
+      port: 20880
+    scan: com.ksq.service.impl
+  profiles:
+    active: test
+
+logging:
+  file: ../logs/pay-service.log
+  level:
+    com.pay.service.dao.mapper: debug

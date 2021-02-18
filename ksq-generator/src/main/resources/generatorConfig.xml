@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<!-- 配置生成器 -->
+<generatorConfiguration>
+    <!-- 配置文件 -->
+    <properties resource="generator.properties"></properties>
+
+    <!-- 驱动包 -->
+    <classPathEntry location="E:/workspace_ide/ksq-pay/ksq-generator/postgresql-9.4-1201-jdbc41.jar" />
+
+
+    <!-- 一个数据库一个context -->
+    <!--defaultModelType="flat" 大数据字段，不分表 -->
+
+    <context id="MysqlContext" targetRuntime="MyBatis3" defaultModelType="flat">
+
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <!-- 由于beginningDelimiter和endingDelimiter的默认值为双引号(")，在Mysql中不能这么写，所以还要将这两个默认值改为`  -->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <property name="useActualColumnNames" value="false" />
+
+        <!-- 为生成的Java模型创建一个toString方法 -->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+
+        <!-- 为生成的Java模型类添加序列化接口，并生成serialVersionUID字段 -->
+        <plugin type="com.ksq.core.plugin.SerializablePlugin">
+            <property name="suppressJavaInterface" value="false"/>
+        </plugin>
+
+        <!-- 生成一个新的selectByExample方法，这个方法可以接收offset和limit参数，主要用来实现分页 -->
+        <plugin type="com.ksq.core.plugin.PaginationPlugin"></plugin>
+
+        <!-- Java模型生成equals和hashcode方法 -->
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+
+        <!-- 生成的代码去掉注释 -->
+        <commentGenerator type="com.ksq.core.plugin.CommentGenerator">
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!-- 数据库连接 -->
+        <jdbcConnection driverClass="org.postgresql.Driver"
+                        connectionURL="jdbc:postgresql://rm-bp11qu8sa08769w3cjo.pg.rds.aliyuncs.com:3433/online_pay?autoReconnect=true&amp;characterEncoding=utf-8"
+                        userId="online_pay"
+                        password="9uMLji1k5V"/>
+
+        <!-- model生成 -->
+        <javaModelGenerator targetPackage="com.ksq.core.entity" targetProject="${models}"/>
+
+        <!-- MapperXML生成 -->
+        <sqlMapGenerator targetPackage="com.ksq.service.dao.mapper" targetProject="${dao}"/>
+
+        <!-- Mapper接口生成 -->
+        <javaClientGenerator targetPackage="com.ksq.service.dao.mapper" targetProject="${dao}" type="XMLMAPPER"/>
+        <table tableName="t_sys_user" domainObjectName="SysUser">
+            <!--value=true字段名和数据库列名相同，value=false则按驼峰命名（前提是数据库列名为下划线命名）-->
+            <property name="useActualColumnNames" value="false" />
+        </table>
+
+    </context>
+</generatorConfiguration>
